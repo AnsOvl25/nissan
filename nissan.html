@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nissan Skyline GT-R R34 - Godzilla</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'bayside-blue': '#0052cc',
+                        'bayside-light': '#1a75ff',
+                        'nismo-red': '#e60012',
+                        'carbon-dark': '#0a0c10',
+                        'carbon-card': '#121620',
+                        'mfd-green': '#00ff66',
+                        'mfd-amber': '#ffb700'
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        chakra: ['Chakra Petch', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #06080c;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-chakra { font-family: 'Chakra Petch', sans-serif; }
+
+        /* Custom Carbon Fiber Pattern */
+        .bg-carbon {
+            background-color: #0a0c10;
+            background-image: radial-gradient(#1e2638 15%, transparent 16%), radial-gradient(#1e2638 15%, transparent 16%);
+            background-size: 16px 16px;
+            background-position: 0 0, 8px 8px;
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(18, 22, 32, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-glow {
+            background: rgba(18, 22, 32, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 82, 204, 0.3);
+            box-shadow: 0 0 25px rgba(0, 82, 204, 0.15);
+        }
+
+        .mfd-screen {
+            background-color: #031008;
+            border: 3px solid #1a3322;
+            box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.15), 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Glow effects */
+        .glow-blue { text-shadow: 0 0 12px rgba(0, 82, 204, 0.8); }
+        .glow-red { text-shadow: 0 0 12px rgba(230, 0, 18, 0.8); }
+        .glow-mfd { text-shadow: 0 0 8px rgba(0, 255, 102, 0.7); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #06080c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2638;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0052cc;
+        }
+
+        /* Pulse Animations */
+        @keyframes turboPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(0, 82, 204, 0.9)); }
+        }
+        .animate-turbo { animation: turboPulse 3s infinite ease-in-out; }
+
+        /* Gauge needle transition */
+        .gauge-needle {
+            transition: transform 0.08s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transform-origin: bottom center;
+        }
+
+        /* Scanline Overlay for MFD */
+        .scanline {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 0, 0, 0.3) 50%,
+                rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+        }
+
+        .clip-slant {
+            clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body class="bg-carbon text-gray-200 antialiased selection:bg-bayside-blue selection:text-white">
+
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="font-orbitron text-2xl font-black italic tracking-wider text-white">
+                    GT-R <span class="text-nismo-red font-normal">R34</span>
+                </span>
+                <span class="hidden sm:inline-block px-2 py-0.5 text-xs font-chakra font-semibold bg-bayside-blue/20 text-bayside-light rounded border border-bayside-blue/40 uppercase tracking-widest">
+                    Legendary JDM
+                </span>
+            </div>
+
+            <nav class="hidden md:flex items-center gap-8 font-chakra text-sm uppercase tracking-wider">
+                <a href="#hero" class="text-gray-300 hover:text-bayside-light transition-colors">Inicio</a>
+                <a href="#specs" class="text-gray-300 hover:text-bayside-light transition-colors">Especificaciones</a>
+                <a href="#mfd" class="text-gray-300 hover:text-mfd-green transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-microchip text-xs"></i> MFD Display
+                </a>
+                <a href="#simulator" class="text-gray-300 hover:text-nismo-red transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-gauge-high text-xs"></i> Simulador
+                </a>
+                <a href="#editions" class="text-gray-300 hover:text-bayside-light transition-colors">Ediciones</a>
+            </nav>
+
+            <a href="#simulator" class="bg-nismo-red hover:bg-red-700 text-white font-chakra font-bold text-xs uppercase px-4 py-2.5 rounded transition-all shadow-lg shadow-nismo-red/30 flex items-center gap-2">
+                <i class="fa-solid fa-volume-high"></i> Acelerar RB26
+            </a>
+        </div>
+    </header>
+
+    <section id="hero" class="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
+        <!-- Ambient background lighting -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-bayside-blue/20 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-[300px] h-[300px] bg-nismo-red/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left text column -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/50 border border-nismo-red/40 text-nismo-red text-xs font-chakra tracking-widest uppercase">
+                        <span class="w-2 h-2 rounded-full bg-nismo-red animate-ping"></span>
+                        Icono del Automovilismo Japonés
+                    </div>
+
+                    <h1 class="font-orbitron font-black text-4xl sm:text-6xl xl:text-7xl tracking-tight text-white uppercase leading-none">
+                        Nissan Skyline <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-bayside-light via-blue-400 to-indigo-200 glow-blue">
+                            GT-R R34
+                        </span>
+                    </h1>
+
+                    <p class="font-chakra text-lg sm:text-xl text-gray-400 max-w-2xl font-light">
+                        El apex de la ingeniería automotriz de los años 90. Apodado <strong class="text-white font-semibold">"Godzilla"</strong> por su dominio absoluto en pista, tracción integral inteligente y el legendario motor twin-turbo RB26DETT.
+                    </p>
+
+                    <!-- Fast Stat Badges -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-bayside-blue">
+                            <span class="block text-xs text-gray-400 font-chakra uppercase">Motor</span>
+                            <span class="font-orbitron text-lg font-bold text-white">RB26DETT</span>
+                            <span class="block text-[10px] text-bayside-light">2.6L Twin-Turbo L6</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-nismo-red">
+                            <span class="block text-xs text-gray-400 font-chakra uppercase">Potencia Real</span>
+                            <span class="font-orbitron text-lg font-bold text-white">~327 HP</span>
+                            <span class="block text-[10px] text-nismo-red">Oficial: 276 HP</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-bayside-blue">
+                            <span class="block text-xs text-gray-400 font-chakra uppercase">Tracción</span>
+                            <span class="font-orbitron text-lg font-bold text-white">ATTESA E-TS</span>
+                            <span class="block text-[10px] text-bayside-light">AWD Pro System</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-emerald-500">
+                            <span class="block text-xs text-gray-400 font-chakra uppercase">0-100 km/h</span>
+                            <span class="font-orbitron text-lg font-bold text-white">4.8s</span>
+                            <span class="block text-[10px] text-emerald-400">Transmisión Getrag 6M</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="#simulator" class="px-8 py-4 bg-gradient-to-r from-bayside-blue to-blue-700 hover:from-blue-600 hover:to-bayside-blue text-white font-orbitron font-bold text-sm tracking-widest uppercase rounded-lg shadow-xl shadow-bayside-blue/25 hover:shadow-bayside-blue/50 transition-all flex items-center gap-3 group">
+                            Probar Simulador <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                        <a href="#mfd" class="px-8 py-4 glass-panel hover:bg-gray-800/80 text-gray-200 font-orbitron font-bold text-sm tracking-widest uppercase rounded-lg border border-gray-700 transition-all">
+                            Explorar MFD
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Visual Column (R34 Graphic Card) -->
+                <div class="lg:col-span-5 relative">
+                    <div class="glass-panel-glow p-6 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-bayside-blue/30 rounded-full blur-2xl"></div>
+                        
+                        <!-- Simulated R34 Silhouette SVG -->
+                        <div class="relative py-8 flex justify-center items-center">
+                            <svg class="w-full h-auto max-w-md filter drop-shadow-[0_10px_20px_rgba(0,82,204,0.4)] transition-transform duration-500 group-hover:scale-105" viewBox="0 0 600 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Car outline graphic representation -->
+                                <path d="M40,170 L80,170 C95,170 100,140 120,135 L190,130 L270,80 L410,80 C440,80 470,105 500,120 L550,130 C570,135 580,150 580,170 L560,170 C560,195 535,210 510,210 C485,210 465,195 465,170 L215,170 C215,195 190,210 165,210 C140,210 120,195 120,170 L40,170 Z" fill="#0b172a" stroke="#0052cc" stroke-width="4"/>
+                                <path d="M275,85 L400,85 C425,85 450,105 470,120 L210,125 Z" fill="#1a75ff" opacity="0.3"/>
+                                <!-- Iconic GT-R Twin Tail Lights Glow -->
+                                <circle cx="560" cy="140" r="12" fill="#e60012" class="animate-pulse"/>
+                                <circle cx="530" cy="142" r="10" fill="#e60012"/>
+                                <!-- Wheels -->
+                                <circle cx="165" cy="170" r="32" fill="#121620" stroke="#94a3b8" stroke-width="6"/>
+                                <circle cx="165" cy="170" r="12" fill="#0052cc"/>
+                                <circle cx="510" cy="170" r="32" fill="#121620" stroke="#94a3b8" stroke-width="6"/>
+                                <circle cx="510" cy="170" r="12" fill="#0052cc"/>
+                                <!-- Headlight beam -->
+                                <polygon points="50,140 0,120 0,180" fill="url(#headlight-grad)" opacity="0.6"/>
+                                <defs>
+                                    <linearGradient id="headlight-grad" x1="1" y1="0" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+                                        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+
+                        <div class="border-t border-gray-800 pt-4 mt-2 flex justify-between items-center font-chakra text-xs text-gray-400">
+                            <div>
+                                <span class="text-white font-semibold">Chasis:</span> BNR34
+                            </div>
+                            <div>
+                                <span class="text-white font-semibold">Color Mítico:</span> Bayside Blue (TV2)
+                            </div>
+                            <div>
+                                <span class="text-white font-semibold">Año:</span> 1999-2002
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="specs" class="py-20 relative bg-carbon border-y border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-bayside-light font-chakra uppercase tracking-widest text-sm font-semibold">Ingeniería Leyenda</span>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1 uppercase">Especificaciones Técnicas</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-bayside-blue to-nismo-red mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Spec Card 1 -->
+                <div class="glass-panel p-6 rounded-xl hover:border-bayside-blue/60 transition-all group">
+                    <div class="w-12 h-12 bg-bayside-blue/20 rounded-lg flex items-center justify-center text-bayside-light text-2xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <h3 class="font-orbitron font-bold text-xl text-white mb-2">Motor RB26DETT</h3>
+                    <p class="font-chakra text-gray-400 text-sm mb-4">
+                        Motor de 6 cilindros en línea de 2.6 litros con doble turbocompresor paralelo y bloque de hierro fundido ultra resistente.
+                    </p>
+                    <ul class="space-y-2 text-xs font-chakra border-t border-gray-800/80 pt-4 text-gray-300">
+                        <li class="flex justify-between"><span class="text-gray-500">Cilindrada:</span> <span>2,568 cc</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Valvulas:</span> <span>24v DOHC</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Aspiración:</span> <span>Twin-Turbo Garrett</span></li>
+                    </ul>
+                </div>
+
+                <!-- Spec Card 2 -->
+                <div class="glass-panel p-6 rounded-xl hover:border-bayside-blue/60 transition-all group">
+                    <div class="w-12 h-12 bg-nismo-red/20 rounded-lg flex items-center justify-center text-nismo-red text-2xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <h3 class="font-orbitron font-bold text-xl text-white mb-2">ATTESA E-TS Pro</h3>
+                    <p class="font-chakra text-gray-400 text-sm mb-4">
+                        Sistema informático de tracción total con reparto de par activo y diferencial de deslizamiento limitado posterior LSD electro-hidráulico.
+                    </p>
+                    <ul class="space-y-2 text-xs font-chakra border-t border-gray-800/80 pt-4 text-gray-300">
+                        <li class="flex justify-between"><span class="text-gray-500">Reparto de Par:</span> <span>0:100 a 50:50</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Dirección trasera:</span> <span>Super HICAS 4WS</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Diferencial:</span> <span>Active LSD Pro</span></li>
+                    </ul>
+                </div>
+
+                <!-- Spec Card 3 -->
+                <div class="glass-panel p-6 rounded-xl hover:border-bayside-blue/60 transition-all group">
+                    <div class="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 text-2xl mb-5 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="font-orbitron font-bold text-xl text-white mb-2">Rendimiento Real</h3>
+                    <p class="font-chakra text-gray-400 text-sm mb-4">
+                        Debido al pacto de caballeros en Japón (limitación a 280 PS), la cifra oficial era modesta, pero su potencial real superaba los 330 CV de fábrica.
+                    </p>
+                    <ul class="space-y-2 text-xs font-chakra border-t border-gray-800/80 pt-4 text-gray-300">
+                        <li class="flex justify-between"><span class="text-gray-500">Potencia Declarada:</span> <span>276 HP @ 6,800 RPM</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Torque:</span> <span>392 Nm @ 4,400 RPM</span></li>
+                        <li class="flex justify-between"><span class="text-gray-500">Velocidad Máx:</span> <span>266 km/h (deslimitado)</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="mfd" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-mfd-green font-chakra uppercase tracking-widest text-xs font-semibold glow-mfd">
+                        <i class="fa-solid fa-circle text-[8px] animate-ping mr-1"></i> Telemetría Pionera
+                    </span>
+                    <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1 uppercase">
+                        Pantalla Multifunción (MFD)
+                    </h2>
+                </div>
+                <p class="font-chakra text-gray-400 text-sm max-w-md mt-4 md:mt-0">
+                    Diseñada junto a Polyphony Digital (creadores de Gran Turismo), la pantalla LCD de 5.8" del R34 revolucionó los deportivos en 1999.
+                </p>
+            </div>
+
+            <!-- MFD Screen Simulation Container -->
+            <div class="mfd-screen rounded-2xl p-6 sm:p-8 relative overflow-hidden text-mfd-green font-orbitron">
+                <div class="scanline absolute inset-0 pointer-events-none opacity-40"></div>
+                
+                <!-- MFD Header bar -->
+                <div class="flex justify-between items-center border-b border-mfd-green/30 pb-4 mb-6 text-xs sm:text-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-mfd-green text-black px-2 py-0.5 font-bold rounded">MULTIFUNCTION DISPLAY</span>
+                        <span class="text-mfd-green/80 hidden sm:inline">NISMO TELEMETRY SYSTEM v3.4</span>
+                    </div>
+                    <div id="mfd-clock" class="text-mfd-green/90 tracking-widest">12:00:00</div>
+                </div>
+
+                <!-- Gauges Grid inside MFD -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- MFD Metric 1: Boost Pressure -->
+                    <div class="bg-black/60 p-4 rounded-lg border border-mfd-green/30 relative">
+                        <div class="flex justify-between text-xs mb-2">
+                            <span>TURBO BOOST</span>
+                            <span id="mfd-boost-val" class="font-bold text-white">0.85 bar</span>
+                        </div>
+                        <div class="w-full bg-green-950/60 h-4 rounded overflow-hidden p-0.5 border border-mfd-green/40">
+                            <div id="mfd-boost-bar" class="bg-mfd-green h-full rounded transition-all duration-300" style="width: 65%;"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-mfd-green/60 mt-1">
+                            <span>0.0</span>
+                            <span>0.7</span>
+                            <span>1.2 bar</span>
+                        </div>
+                    </div>
+
+                    <!-- MFD Metric 2: Torque Split AWD -->
+                    <div class="bg-black/60 p-4 rounded-lg border border-mfd-green/30 relative">
+                        <div class="flex justify-between text-xs mb-2">
+                            <span>ATTESA TORQUE SPLIT</span>
+                            <span id="mfd-torque-val" class="font-bold text-white">20% FRONT</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                            <div class="bg-green-950/40 p-2 rounded border border-mfd-green/20">
+                                <span class="text-[10px] text-mfd-green/70 block">FRONT</span>
+                                <span id="mfd-front-tq" class="text-sm font-bold">20%</span>
+                            </div>
+                            <div class="bg-green-950/40 p-2 rounded border border-mfd-green/20">
+                                <span class="text-[10px] text-mfd-green/70 block">REAR</span>
+                                <span id="mfd-rear-tq" class="text-sm font-bold">80%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MFD Metric 3: Oil & Water Temp -->
+                    <div class="bg-black/60 p-4 rounded-lg border border-mfd-green/30 relative">
+                        <div class="flex justify-between text-xs mb-2">
+                            <span>TEMPERATURES</span>
+                            <span class="text-xs text-mfd-green/70">NORMAL</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-[11px] text-mfd-green/80">OIL TEMP</span>
+                                <span id="mfd-oil-temp" class="text-white font-bold">92°C</span>
+                            </div>
+                            <div class="w-full bg-green-950/60 h-2 rounded overflow-hidden">
+                                <div id="mfd-oil-bar" class="bg-mfd-green h-full" style="width: 60%;"></div>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-[11px] text-mfd-green/80">WATER TEMP</span>
+                                <span id="mfd-water-temp" class="text-white font-bold">88°C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Live Throttle & G-Force Simulation Graphic inside MFD -->
+                <div class="mt-6 pt-6 border-t border-mfd-green/20 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <span class="text-xs text-mfd-green/80 block mb-2">G-FORCE METER</span>
+                        <div class="w-32 h-32 mx-auto sm:mx-0 border border-mfd-green/40 rounded-full relative flex items-center justify-center bg-black/40">
+                            <div class="absolute w-full h-[1px] bg-mfd-green/20"></div>
+                            <div class="absolute h-full w-[1px] bg-mfd-green/20"></div>
+                            <!-- Dot -->
+                            <div id="g-force-dot" class="w-3 h-3 bg-mfd-green rounded-full shadow-[0_0_10px_#00ff66] transition-all duration-100" style="transform: translate(0px, 0px);"></div>
+                        </div>
+                    </div>
+                    <div class="text-xs space-y-2 text-mfd-green/80 font-chakra">
+                        <p><i class="fa-solid fa-circle-info text-mfd-green mr-1"></i> El MFD procesaba datos en tiempo real de 7 sensores repartidos por el vehículo.</p>
+                        <p>Permitía descargar registros de telemetría a través de puerto RS-232 para análisis en computadora.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="simulator" class="py-20 bg-carbon border-y border-gray-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-nismo-red font-chakra uppercase tracking-widest text-xs font-semibold glow-red">
+                    Experiencia Sensorial
+                </span>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1 uppercase">
+                    Simulador RB26DETT
+                </h2>
+                <p class="font-chakra text-gray-400 text-sm mt-2">
+                    Presiona el pedal de aceleración o mantén presionada la tecla <kbd class="px-2 py-0.5 bg-gray-800 rounded border border-gray-700 text-white font-mono">ESPACIO</kbd> para subir de revoluciones y escuchar rugir el motor.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 sm:p-10 rounded-2xl max-w-4xl mx-auto border border-gray-800 shadow-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    
+                    <!-- Analog Instrument Gauges Cluster -->
+                    <div class="flex flex-col items-center justify-center">
+                        <!-- Tachometer Dial -->
+                        <div class="relative w-64 h-64 bg-slate-950 rounded-full border-4 border-gray-800 shadow-[inset_0_0_20px_rgba(0,0,0,0.9)] flex items-center justify-center">
+                            <!-- RPM Numbers -->
+                            <div class="absolute inset-0 font-orbitron font-bold text-xs text-gray-400 p-4">
+                                <span class="absolute bottom-10 left-12">0</span>
+                                <span class="absolute left-8 top-32">2</span>
+                                <span class="absolute left-14 top-14">4</span>
+                                <span class="absolute top-8 left-28">6</span>
+                                <span class="absolute right-14 top-14 text-nismo-red">8</span>
+                                <span class="absolute right-8 top-32 text-nismo-red">9</span>
+                                <span class="absolute bottom-10 right-12 text-nismo-red">10</span>
+                            </div>
+
+                            <!-- Dial Center -->
+                            <div class="w-12 h-12 bg-gray-900 rounded-full border-2 border-gray-700 z-20 flex items-center justify-center shadow-lg">
+                                <span class="w-4 h-4 bg-nismo-red rounded-full"></span>
+                            </div>
+
+                            <!-- Tachometer Needle -->
+                            <div id="rpm-needle" class="absolute bottom-1/2 left-1/2 w-1 h-28 bg-nismo-red z-10 -ml-0.5 origin-bottom gauge-needle rounded-t shadow-[0_0_10px_#e60012]" style="transform: rotate(-120deg);"></div>
+
+                            <!-- Digital Display Box in Center -->
+                            <div class="absolute bottom-12 font-orbitron text-center z-20 bg-black/80 px-3 py-1 rounded border border-gray-800">
+                                <span id="rpm-digital" class="text-2xl font-black text-white tracking-wider">900</span>
+                                <span class="block text-[8px] text-gray-500 font-chakra">RPM x1000</span>
+                            </div>
+                        </div>
+
+                        <!-- Boost Gauge Small -->
+                        <div class="mt-6 flex items-center gap-4 bg-black/40 px-6 py-3 rounded-full border border-gray-800">
+                            <i class="fa-solid fa-wind text-bayside-light"></i>
+                            <span class="font-chakra text-xs text-gray-400 uppercase">Presión Turbo:</span>
+                            <span id="boost-gauge-val" class="font-orbitron font-bold text-bayside-light text-sm">0.00 BAR</span>
+                        </div>
+                    </div>
+
+                    <!-- Throttle & Controls Column -->
+                    <div class="flex flex-col items-center justify-center space-y-6">
+                        
+                        <!-- Sound Activation Toggle -->
+                        <div class="w-full">
+                            <button id="sound-init-btn" class="w-full py-3 bg-gray-800 hover:bg-gray-700 text-white font-chakra text-xs tracking-wider uppercase rounded-lg border border-gray-600 transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-power-off text-nismo-red"></i> Encender Sistema de Audio
+                            </button>
+                        </div>
+
+                        <!-- Interactive Accelerator Pedal -->
+                        <div class="w-full flex flex-col items-center">
+                            <button id="pedal-btn" class="w-40 h-64 bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900 hover:from-gray-600 hover:to-gray-800 rounded-2xl border-4 border-gray-600 shadow-2xl relative flex flex-col items-center justify-between p-4 cursor-pointer select-none active:scale-95 transition-transform group">
+                                <div class="w-full h-3 bg-gray-900 rounded-full border border-gray-700"></div>
+                                
+                                <!-- Pedal Grip Lines -->
+                                <div class="space-y-3 w-full px-2">
+                                    <div class="h-2 bg-gray-900 rounded border-b border-gray-700"></div>
+                                    <div class="h-2 bg-gray-900 rounded border-b border-gray-700"></div>
+                                    <div class="h-2 bg-gray-900 rounded border-b border-gray-700"></div>
+                                    <div class="h-2 bg-gray-900 rounded border-b border-gray-700"></div>
+                                </div>
+
+                                <span class="font-orbitron text-[10px] text-gray-400 tracking-widest uppercase group-hover:text-white">
+                                    ACELERAR
+                                </span>
+                            </button>
+                            <span class="text-xs text-gray-500 font-chakra mt-3">Haz clic y mantén presionado</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="editions" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-bayside-light font-chakra uppercase tracking-widest text-xs font-semibold">Exclusividad Purista</span>
+                <h2 class="font-orbitron text-3xl sm:text-4xl font-black text-white mt-1 uppercase">Ediciones Especiales</h2>
+                <p class="font-chakra text-gray-400 text-sm mt-2">Las variantes más codiciadas y legendarias de la plataforma R34.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Edition 1: V-Spec II Nür -->
+                <div class="glass-panel rounded-2xl overflow-hidden border border-gray-800 hover:border-bayside-blue/50 transition-all flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 text-[10px] font-orbitron font-bold rounded">1,003 UNIDADES</span>
+                            <span class="text-gray-500 font-chakra text-xs">2002</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white mb-2">V-Spec II Nür</h3>
+                        <p class="font-chakra text-gray-400 text-sm mb-4">
+                            Nombrado en honor al circuito de Nürburgring. Equipaba el motor N1 especificación de carreras con turbos de mazo de titanio.
+                        </p>
+                    </div>
+                    <div class="bg-black/40 px-6 py-4 border-t border-gray-800/60 font-chakra text-xs text-gray-400 flex justify-between">
+                        <span>Color Emblemático:</span>
+                        <span class="text-white font-medium">Millennium Jade</span>
+                    </div>
+                </div>
+
+                <!-- Edition 2: NISMO Z-Tune -->
+                <div class="glass-panel rounded-2xl overflow-hidden border border-nismo-red/40 hover:border-nismo-red transition-all flex flex-col justify-between relative">
+                    <div class="absolute top-0 right-0 bg-nismo-red text-white font-orbitron text-[9px] font-black px-3 py-1 rounded-bl-lg">
+                        EL SANTO GRIAL
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 bg-nismo-red/20 text-nismo-red border border-nismo-red/40 text-[10px] font-orbitron font-bold rounded">SOLO 19 UNIDADES</span>
+                            <span class="text-gray-500 font-chakra text-xs">2003</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white mb-2">NISMO Z-Tune</h3>
+                        <p class="font-chakra text-gray-400 text-sm mb-4">
+                            Construido a mano por Nismo incrementando la cilindrada del motor a 2.8L (RB28DETT) produciendo 500 HP de fábrica.
+                        </p>
+                    </div>
+                    <div class="bg-black/40 px-6 py-4 border-t border-gray-800/60 font-chakra text-xs text-gray-400 flex justify-between">
+                        <span>Potencia:</span>
+                        <span class="text-nismo-red font-bold">500 HP / 540 Nm</span>
+                    </div>
+                </div>
+
+                <!-- Edition 3: M-Spec -->
+                <div class="glass-panel rounded-2xl overflow-hidden border border-gray-800 hover:border-bayside-blue/50 transition-all flex flex-col justify-between">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2.5 py-1 bg-bayside-blue/20 text-bayside-light border border-bayside-blue/40 text-[10px] font-orbitron font-bold rounded">366 UNIDADES</span>
+                            <span class="text-gray-500 font-chakra text-xs">2001</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white mb-2">M-Spec</h3>
+                        <p class="font-chakra text-gray-400 text-sm mb-4">
+                            La versión enfocada al gran turismo y lujo (nombrada por Mizuno, el ingeniero jefe). Incluía amortiguadores 'Ripple Control' y asientos de cuero calefactables.
+                        </p>
+                    </div>
+                    <div class="bg-black/40 px-6 py-4 border-t border-gray-800/60 font-chakra text-xs text-gray-400 flex justify-between">
+                        <span>Enfoque:</span>
+                        <span class="text-white font-medium">Lujo & Confort GT</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <span class="font-orbitron text-xl font-black italic tracking-wider text-white">
+                    GT-R <span class="text-nismo-red">R34</span>
+                </span>
+                <span class="text-xs text-gray-500 font-chakra">Tributo Interactivo</span>
+            </div>
+            <p class="text-xs text-gray-500 font-chakra text-center sm:text-right">
+                Diseñado para fanáticos de la cultura automotriz JDM. Nissan y GT-R son marcas registradas.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // State variables
+        let audioCtxReady = false;
+        let osc = null;
+        let gainNode = null;
+        let isAccelerating = false;
+        let currentRpm = 900;
+        const idleRpm = 900;
+        const maxRpm = 8200;
+
+        // Elements
+        const pedalBtn = document.getElementById('pedal-btn');
+        const rpmNeedle = document.getElementById('rpm-needle');
+        const rpmDigital = document.getElementById('rpm-digital');
+        const boostGaugeVal = document.getElementById('boost-gauge-val');
+        const soundInitBtn = document.getElementById('sound-init-btn');
+
+        // MFD elements
+        const mfdBoostVal = document.getElementById('mfd-boost-val');
+        const mfdBoostBar = document.getElementById('mfd-boost-bar');
+        const mfdFrontTq = document.getElementById('mfd-front-tq');
+        const mfdRearTq = document.getElementById('mfd-rear-tq');
+        const mfdTorqueVal = document.getElementById('mfd-torque-val');
+        const mfdOilTemp = document.getElementById('mfd-oil-temp');
+        const mfdOilBar = document.getElementById('mfd-oil-bar');
+        const mfdClock = document.getElementById('mfd-clock');
+        const gForceDot = document.getElementById('g-force-dot');
+
+        // Initialize Web Audio via Tone.js or native Web Audio synth
+        function initAudio() {
+            if (audioCtxReady) return;
+            
+            try {
+                Tone.start();
+                
+                // Engine Sound Oscillator setup
+                osc = new Tone.Oscillator({
+                    frequency: 30,
+                    type: "sawtooth"
+                });
+
+                const filter = new Tone.Filter({
+                    frequency: 300,
+                    type: "lowpass"
+                });
+
+                gainNode = new Tone.Gain(0.15);
+                
+                osc.chain(filter, gainNode, Tone.Destination);
+                osc.start();
+
+                audioCtxReady = true;
+                soundInitBtn.classList.remove('bg-gray-800');
+                soundInitBtn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-400');
+                soundInitBtn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Audio Activado`;
+            } catch (e) {
+                console.log("Audio Init Warning:", e);
+            }
+        }
+
+        soundInitBtn.addEventListener('click', initAudio);
+
+        // Throttle Interaction Events
+        function startAccelerating() {
+            if (!audioCtxReady) initAudio();
+            isAccelerating = true;
+            pedalBtn.classList.add('translate-y-2');
+        }
+
+        function stopAccelerating() {
+            isAccelerating = false;
+            pedalBtn.classList.remove('translate-y-2');
+            
+            // Blow off valve sound effect simulation when releasing throttle at high RPM
+            if (currentRpm > 4000 && audioCtxReady) {
+                playBlowOffValve();
+            }
+        }
+
+        function playBlowOffValve() {
+            const noise = new Tone.Noise("white").start();
+            const filter = new Tone.Filter(2000, "bandpass").toDestination();
+            const noiseGain = new Tone.Gain(0.2).toDestination();
+            noise.connect(filter);
+            filter.connect(noiseGain);
+            
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, Tone.now() + 0.4);
+            setTimeout(() => { noise.stop(); noise.dispose(); }, 400);
+        }
+
+        // Mouse & Touch listeners for Accelerator Pedal
+        pedalBtn.addEventListener('mousedown', startAccelerating);
+        window.addEventListener('mouseup', stopAccelerating);
+        
+        pedalBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startAccelerating();
+        });
+        window.addEventListener('touchend', stopAccelerating);
+
+        // Keyboard Spacebar listener
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !e.repeat) {
+                startAccelerating();
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'Space') {
+                stopAccelerating();
+            }
+        });
+
+        // Main Animation & Physics Loop
+        function engineLoop() {
+            if (isAccelerating) {
+                currentRpm += 120; // Rev up rate
+                if (currentRpm > maxRpm) currentRpm = maxRpm - Math.random() * 150; // Rev limiter bounce
+            } else {
+                currentRpm -= 85; // Natural spin down
+                if (currentRpm < idleRpm) currentRpm = idleRpm;
+            }
+
+            // Update Tachometer Needle
+            // Map 0 RPM to -120deg, 10000 RPM to 120deg
+            const angle = -120 + (currentRpm / 10000) * 240;
+            rpmNeedle.style.transform = `rotate(${angle}deg)`;
+            rpmDigital.textContent = Math.round(currentRpm);
+
+            // Calculate Boost Pressure based on RPM
+            let boost = 0;
+            if (currentRpm > 2500) {
+                boost = Math.min(1.1, ((currentRpm - 2500) / 5500) * 1.1);
+            }
+            boostGaugeVal.textContent = boost.toFixed(2) + " BAR";
+
+            // Update Web Audio frequency matching RPM
+            if (audioCtxReady && osc) {
+                // Map RPM to pitch frequency
+                const freq = 20 + (currentRpm / maxRpm) * 120;
+                osc.frequency.setTargetAtTime(freq, Tone.now(), 0.05);
+            }
+
+            // Update MFD Telemetry
+            mfdBoostVal.textContent = boost.toFixed(2) + " bar";
+            mfdBoostBar.style.width = `${Math.min(100, (boost / 1.2) * 100)}%`;
+
+            // Dynamic Torque Split (More front torque on acceleration)
+            let frontTq = 0;
+            if (isAccelerating && currentRpm > 3000) {
+                frontTq = Math.min(50, Math.floor(((currentRpm - 3000) / 5000) * 50));
+            }
+            mfdFrontTq.textContent = `${frontTq}%`;
+            mfdRearTq.textContent = `${100 - frontTq}%`;
+            mfdTorqueVal.textContent = `${frontTq}% FRONT`;
+
+            // Simulated G-Force movement
+            let gX = 0;
+            let gY = isAccelerating ? (currentRpm / maxRpm) * -25 : 0;
+            gForceDot.style.transform = `translate(${gX}px, ${gY}px)`;
+
+            requestAnimationFrame(engineLoop);
+        }
+
+        // Live Clock for MFD
+        function updateClock() {
+            const now = new Date();
+            mfdClock.textContent = now.toTimeString().split(' ')[0];
+        }
+
+        // Start Loop on window load
+        window.onload = function() {
+            setInterval(updateClock, 1000);
+            updateClock();
+            engineLoop();
+        };
+    </script>
+</body>
+</html>
